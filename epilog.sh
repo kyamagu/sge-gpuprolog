@@ -5,16 +5,14 @@
 # Kota Yamaguchi 2015 <kyamagu@vision.is.tohoku.ac.jp>
 
 # Check if the environment file is readable.
-if [ ! -f $SGE_JOB_SPOOL_DIR/environment -o \
-     ! -r $SGE_JOB_SPOOL_DIR/environment ]
+ENV_FILE=$SGE_JOB_SPOOL_DIR/environment
+if [ ! -f $ENV_FILE -o ! -r $ENV_FILE ]
 then
   exit 1
 fi
 
-SGE_GPU=$(grep SGE_GPU $SGE_JOB_SPOOL_DIR/environment | \
-  sed -n "s/SGE_GPU=\(.*\)/\1/p")
-
-for device_id in $SGE_GPU
+# Remove lock files.
+for device_id in $(grep SGE_GPU $ENV_FILE | sed -n "s/SGE_GPU=\(.*\)/\1/p")
 do
   lockfile=/tmp/lock-nvidia$device_id
   if [ -f $lockfile ]

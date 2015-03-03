@@ -17,8 +17,8 @@ then
 fi
 
 # Check if the environment file is writable.
-if [ ! -f $SGE_JOB_SPOOL_DIR/environment -o \
-     ! -w $SGE_JOB_SPOOL_DIR/environment ]
+ENV_FILE=$SGE_JOB_SPOOL_DIR/environment
+if [ ! -f $ENV_FILE -o ! -w $ENV_FILE ]
 then
   exit 1
 fi
@@ -26,15 +26,11 @@ fi
 # Allocate and lock GPUs.
 SGE_GPU=""
 i=0
-for device in $(ls /dev/nvidia[0-9])
+for device_id in $(nvidia-smi -L | cut -f1 -d":" | cut -f2 -d" ")
 do
-  device=$(basename $device)
-  device_id=$(echo $device | sed -e s/nvidia//g)
-  lockfile=/tmp/lock-$device
-  if [ -f $lockfile ]
+  lockfile=/tmp/lock-gpu$device_id
+  if [ ! -f $lockfile ]
   then
-    continue
-  else
     touch $lockfile
     SGE_GPU="$SGE_GPU $device_id"
     i=$(expr $i + 1)
@@ -51,5 +47,5 @@ then
 fi
 
 # Set the environment.
-echo SGE_GPU="$(echo $SGE_GPU | sed -e 's/^ //')" >> $SGE_JOB_SPOOL_DIR/environment
+echo SGE_GPU="$(echo $SGE_GPU | sed -e 's/^ //')" >> $ENV_FILE
 exit 0
