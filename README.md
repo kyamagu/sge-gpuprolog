@@ -19,11 +19,9 @@ First, set up consumable complex `gpu`.
     #----------------------------------------------------------------------------------------------
     gpu                 gpu        INT         <=      YES         YES        0        0
 
-At each exec-host.
+At each exec-host, add `gpu` resource complex. For example,
 
-    qconf -me node01
-
-    complex_values        gpu=1
+    qconf -aattr exechost complex_values gpu=1 node01
 
 Set up `prolog` and `epilog` in the queue.
 
