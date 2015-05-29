@@ -12,7 +12,7 @@ then
 fi
 
 # Remove lock files.
-for device_id in $(grep SGE_GPU $ENV_FILE | sed -n "s/SGE_GPU=\(.*\)/\1/p")
+for device_id in $(grep SGE_GPU $ENV_FILE | sed -n "s/SGE_GPU=\(.*\)/\1/p" | xargs shuf -e)
 do
   lockfile=/tmp/lock-nvidia$device_id
   if [ -f $lockfile ]
