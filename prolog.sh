@@ -6,7 +6,7 @@
 
 # Query how many gpus to allocate.
 NGPUS=$(qstat -j $JOB_ID | \
-  sed -n "s/hard resource_list:.*gpu=\([[:digit:]]\+\).*/\1/p")
+        sed -n "s/hard resource_list:.*gpu=\([[:digit:]]\+\).*/\1/p")
 if [ -z $NGPUS ]
 then
   exit 0
@@ -26,12 +26,12 @@ fi
 # Allocate and lock GPUs.
 SGE_GPU=""
 i=0
-for device_id in $(nvidia-smi -L | cut -f1 -d":" | cut -f2 -d" " | xargs shuf -e)
+device_ids=$(nvidia-smi -L | cut -f1 -d":" | cut -f2 -d" " | xargs shuf -e)
+for device_id in $device_ids
 do
   lockfile=/tmp/lock-gpu$device_id
-  if [ ! -f $lockfile ]
+  if mkdir $lockfile
   then
-    touch $lockfile
     SGE_GPU="$SGE_GPU $device_id"
     i=$(expr $i + 1)
     if [ $i -ge $NGPUS ]
@@ -43,7 +43,8 @@ done
 
 if [ $i -lt $NGPUS ]
 then
-  echo "WARNING: Only reserved $i of $NGPUS requested devices."
+  echo "ERROR: Only reserved $i of $NGPUS requested devices."
+  exit 1
 fi
 
 # Set the environment.
