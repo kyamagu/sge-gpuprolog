@@ -45,6 +45,6 @@ The job script can access `SGE_GPU` variable.
     #!/bin/sh
     echo $SGE_GPU
 
-The variable contains a space-delimited device IDs, such as `0` or `0 1 2`
+The variable contains a comma-delimited device IDs, such as `0` or `0,1,2`
 depending on the number of `gpu` resources to be requested. Use the device ID
 for `cudaSetDevice()`.

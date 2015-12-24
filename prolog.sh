@@ -15,6 +15,7 @@ if [ $NGPUS -le 0 ]
 then
   exit 0
 fi
+NGPUS=$(expr $NGPUS \* ${NSLOTS=1})
 
 # Check if the environment file is writable.
 ENV_FILE=$SGE_JOB_SPOOL_DIR/environment
@@ -48,5 +49,5 @@ then
 fi
 
 # Set the environment.
-echo SGE_GPU="$(echo $SGE_GPU | sed -e 's/^ //')" >> $ENV_FILE
+echo SGE_GPU="$(echo $SGE_GPU | sed -e 's/^ //' | sed -e 's/ /,/g')" >> $ENV_FILE
 exit 0
