@@ -3,7 +3,7 @@
 # Startup script to allocate GPU devices.
 #
 # Kota Yamaguchi 2015 <kyamagu@vision.is.tohoku.ac.jp>
-
+# Geert Geurts 2017 <geert.geurts@dalco.ch>
 # Query how many gpus to allocate.
 NGPUS=$(qstat -j $JOB_ID | \
         sed -n "s/hard resource_list:.*gpu=\([[:digit:]]\+\).*/\1/p")
@@ -27,7 +27,7 @@ fi
 # Allocate and lock GPUs.
 SGE_GPU=""
 i=0
-device_ids=$(nvidia-smi -L | cut -f1 -d":" | cut -f2 -d" " | xargs shuf -e)
+device_ids=$(ls /dev/nvidia[0-9]*|grep -oE "[0-9]+")
 for device_id in $device_ids
 do
   lockfile=/tmp/lock-gpu$device_id
@@ -44,7 +44,11 @@ done
 
 if [ $i -lt $NGPUS ]
 then
-  echo "ERROR: Only reserved $i of $NGPUS requested devices."
+  echo "ERROR: Only able to reserve $i of $NGPUS requested devices."
+  for device_id in $SGE_GPU; do
+	lockfile=/tmp/lock-gpu$device_id
+	rmdir $lockfile
+  done
   exit 1
 fi
 
