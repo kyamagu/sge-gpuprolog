@@ -18,7 +18,7 @@ device_ids=$(grep SGE_GPU $ENV_FILE | \
              xargs shuf -e)
 for device_id in $device_ids
 do
-  lockfile=/tmp/lock-nvidia$device_id
+  lockfile=/tmp/lock-gpu$device_id
   if [ -d $lockfile ]
   then
     rmdir -f $lockfile
