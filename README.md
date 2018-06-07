@@ -17,7 +17,7 @@ First, set up consumable complex `gpu`.
 
     #name               shortcut   type        relop   requestable consumable default  urgency
     #----------------------------------------------------------------------------------------------
-    gpu                 gpu        INT         <=      YES         YES        0        0
+    gpu                 gpu        INT         <=      YES         JOB        0        0
 
 At each exec-host, add `gpu` resource complex. For example,
 
