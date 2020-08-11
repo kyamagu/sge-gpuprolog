@@ -5,6 +5,9 @@
 # Kota Yamaguchi 2015 <kyamagu@vision.is.tohoku.ac.jp>
 
 # Query how many gpus to allocate.
+
+source $SGE_ROOT/$SGE_CELL/common/settings.sh
+
 NGPUS=$(qstat -j $JOB_ID | \
         sed -n "s/hard resource_list:.*gpu=\([[:digit:]]\+\).*/\1/p")
 if [ -z $NGPUS ]
