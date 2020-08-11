@@ -8,7 +8,7 @@
 ENV_FILE=$SGE_JOB_SPOOL_DIR/environment
 if [ ! -f $ENV_FILE -o ! -r $ENV_FILE ]
 then
-  exit 1
+  exit 100
 fi
 
 # Remove lock files.

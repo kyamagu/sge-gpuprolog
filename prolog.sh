@@ -24,7 +24,7 @@ NGPUS=$(expr $NGPUS \* ${NSLOTS=1})
 ENV_FILE=$SGE_JOB_SPOOL_DIR/environment
 if [ ! -f $ENV_FILE -o ! -w $ENV_FILE ]
 then
-  exit 1
+  exit 100
 fi
 
 # Allocate and lock GPUs.
@@ -48,7 +48,7 @@ done
 if [ $i -lt $NGPUS ]
 then
   echo "ERROR: Only reserved $i of $NGPUS requested devices."
-  exit 1
+  exit 100
 fi
 
 # Set the environment.
