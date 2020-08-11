@@ -40,10 +40,10 @@ Request `gpu` resource in the designated queue.
 
     qsub -q gpu.q -l gpu=1 gpujob.sh
 
-The job script can access `SGE_GPU` variable.
+The job script can access `CUDA_VISIBLE_DEVICES` variable.
 
     #!/bin/sh
-    echo $SGE_GPU
+    echo $CUDA_VISIBLE_DEVICES
 
 The variable contains a comma-delimited device IDs, such as `0` or `0,1,2`
 depending on the number of `gpu` resources to be requested. Use the device ID

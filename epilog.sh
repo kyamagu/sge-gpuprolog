@@ -12,9 +12,9 @@ then
 fi
 
 # Remove lock files.
-device_ids=$(grep SGE_GPU $ENV_FILE | \
+device_ids=$(grep CUDA_VISIBLE_DEVICES $ENV_FILE | \
              sed -e "s/,/ /g" | \
-             sed -n "s/SGE_GPU=\(.*\)/\1/p" | \
+             sed -n "s/CUDA_VISIBLE_DEVICES=\(.*\)/\1/p" | \
              xargs shuf -e)
 for device_id in $device_ids
 do

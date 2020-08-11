@@ -49,5 +49,5 @@ then
 fi
 
 # Set the environment.
-echo SGE_GPU="$(echo $SGE_GPU | sed -e 's/^ //' | sed -e 's/ /,/g')" >> $ENV_FILE
+echo CUDA_VISIBLE_DEVICES="$(echo $SGE_GPU | sed -e 's/^ //' | sed -e 's/ /,/g')" >> $ENV_FILE
 exit 0
