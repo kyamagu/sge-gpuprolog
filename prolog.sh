@@ -48,6 +48,9 @@ done
 if [ $i -lt $NGPUS ]
 then
   echo "ERROR: Only reserved $i of $NGPUS requested devices."
+  for device_id in $SGE_GPU; do
+    rmdir /tmp/lock-gpu$device_id
+  done
   exit 100
 fi
 
