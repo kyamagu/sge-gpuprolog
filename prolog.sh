@@ -5,6 +5,9 @@
 # Kota Yamaguchi 2015 <kyamagu@vision.is.tohoku.ac.jp>
 
 # Query how many gpus to allocate.
+
+source $SGE_ROOT/$SGE_CELL/common/settings.sh
+
 NGPUS=$(qstat -j $JOB_ID | \
         sed -n "s/hard resource_list:.*gpu=\([[:digit:]]\+\).*/\1/p")
 if [ -z $NGPUS ]
@@ -21,7 +24,7 @@ NGPUS=$(expr $NGPUS \* ${NSLOTS=1})
 ENV_FILE=$SGE_JOB_SPOOL_DIR/environment
 if [ ! -f $ENV_FILE -o ! -w $ENV_FILE ]
 then
-  exit 1
+  exit 100
 fi
 
 # Allocate and lock GPUs.
@@ -45,9 +48,12 @@ done
 if [ $i -lt $NGPUS ]
 then
   echo "ERROR: Only reserved $i of $NGPUS requested devices."
-  exit 1
+  for device_id in $SGE_GPU; do
+    rmdir /tmp/lock-gpu$device_id
+  done
+  exit 100
 fi
 
 # Set the environment.
-echo SGE_GPU="$(echo $SGE_GPU | sed -e 's/^ //' | sed -e 's/ /,/g')" >> $ENV_FILE
+echo CUDA_VISIBLE_DEVICES="$(echo $SGE_GPU | sed -e 's/^ //' | sed -e 's/ /,/g')" >> $ENV_FILE
 exit 0
