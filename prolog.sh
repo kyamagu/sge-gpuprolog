@@ -34,7 +34,7 @@ device_ids=$(nvidia-smi -L | cut -f1 -d":" | cut -f2 -d" " | xargs shuf -e)
 for device_id in $device_ids
 do
   lockfile=/tmp/lock-gpu$device_id
-  if mkdir $lockfile
+  if mkdir $lockfile 2>/dev/null
   then
     SGE_GPU="$SGE_GPU $device_id"
     i=$(expr $i + 1)
