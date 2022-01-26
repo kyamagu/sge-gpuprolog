@@ -48,3 +48,15 @@ The job script can access `CUDA_VISIBLE_DEVICES` variable.
 The variable contains a comma-delimited device IDs, such as `0` or `0,1,2`
 depending on the number of `gpu` resources to be requested. Use the device ID
 for `cudaSetDevice()`.
+
+Interactive jobs
+--------------------
+The environment variables provided by Grid Engine for batch jobs are not available to interactive jobs.  Therefore prolog.sh may fail for interactive jobs created using qlogin command. To make all the environment variables available in the job, one can use set_sge_qlogin_env.sh file in ~/.profile or systemwide /etc/profile as shown below:
+#
+# Sets SGE env variables for qlogin sessions
+SGE_QLOGIN_ENV=path_file/set_sge_qlogin_env.sh
+if [ -f ${SGE_QLOGIN_ENV} ]
+then
+    source ${SGE_QLOGIN_ENV}
+fi
+
