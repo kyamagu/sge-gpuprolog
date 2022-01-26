@@ -53,9 +53,9 @@ Interactive jobs
 --------------------
 The environment variables provided by Grid Engine for batch jobs are not available to interactive jobs.  Therefore prolog.sh may fail for interactive jobs created using qlogin command. To make all the environment variables available in the job, one can use set_sge_qlogin_env.sh file in ~/.profile or systemwide /etc/profile as shown below:
 
-SGE_QLOGIN_ENV=path_file/set_sge_qlogin_env.sh
-if [ -f ${SGE_QLOGIN_ENV} ]
-then
-    source ${SGE_QLOGIN_ENV}
-fi
+    SGE_QLOGIN_ENV=path_file/set_sge_qlogin_env.sh
+    if [ -f ${SGE_QLOGIN_ENV} ]
+    then
+        source ${SGE_QLOGIN_ENV}
+    fi
 
